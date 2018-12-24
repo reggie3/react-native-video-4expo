@@ -1,2 +1,2 @@
-import VideoPlayer from './VideoPlayer';
-export default VideoPlayer;
+import VideoRecorder from './VideoRecorder';
+export default VideoRecorder;

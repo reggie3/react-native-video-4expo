@@ -21,13 +21,13 @@ const random_rgba = () => {
     r().toFixed(1) +
     ')'
   );
-};
+}; 
 const BACKGROUND_COLOR = random_rgba();
 
 const URI =
   'https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4';
 
-class VideoScreen extends React.Component {
+class PlayVideoScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -117,4 +117,4 @@ class VideoScreen extends React.Component {
   }
 }
 
-export default withNavigation(VideoScreen);
+export default withNavigation(PlayVideoScreen);

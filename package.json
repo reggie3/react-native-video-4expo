@@ -1,9 +1,9 @@
 {
   "main": "node_modules/expo/AppEntry.js",
-  "name": "video-player-with-nav",
+  "name": "react-native-video-recorder-4expo",
   "private": false,
   "version": "0.0.1",
-  "description": "Test of importing react-native-video-player-no-linking into an app that uses navigation.",
+  "description": "Test app for react-native-video-recorder-4expo.",
   "dependencies": {
     "expo": "^31.0.0",
     "native-base": "^2.8.2",

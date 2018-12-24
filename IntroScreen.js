@@ -34,10 +34,10 @@ class IntroScreen extends React.Component {
         <Button
           style={{ margin: 10 }}
           onPress={() => {
-            this.props.navigation.navigate('VideoScreen');
+            this.props.navigation.navigate('RecordVideoScreen');
           }}
         >
-          <Text>Go to VideoScreen</Text>
+          <Text>Go to RecordVideoScreen</Text>
         </Button>
       </Container>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import VideoScreen from './VideoScreen';
+import RecordVideoScreen from './RecordVideoScreen';
+import PlayVideoScreen from './PlayVideoScreen';
 import IntroScreen from './IntroScreen';
 //
 import { createStackNavigator } from 'react-navigation';
@@ -11,8 +12,11 @@ const RootStack = createStackNavigator(
     IntroScreen: {
       screen: IntroScreen
     },
-    VideoScreen: {
-      screen: VideoScreen
+    RecordVideoScreen: {
+      screen: RecordVideoScreen
+    },
+    PlayVideoScreen: {
+      screen: PlayVideoScreen
     }
   },
   {

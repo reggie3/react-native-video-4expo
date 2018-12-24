@@ -2,15 +2,15 @@ import React from 'react';
 
 import RecordVideoScreen from './RecordVideoScreen';
 import PlayVideoScreen from './PlayVideoScreen';
-import IntroScreen from './IntroScreen';
+import HomeScreen from './HomeScreen';
 //
 import { createStackNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 
 const RootStack = createStackNavigator(
   {
-    IntroScreen: {
-      screen: IntroScreen
+    HomeScreen: {
+      screen: HomeScreen
     },
     RecordVideoScreen: {
       screen: RecordVideoScreen
@@ -20,11 +20,21 @@ const RootStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'IntroScreen',
+    initialRouteName: 'HomeScreen',
     navigationOptions: {
-      header: null
-    }
+      title: 'Video Recorder 4Expo Demo',
+      headerStyle: {
+        backgroundColor: '#2266cc',
+
+      },
+      headerTintColor: '#44f',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        color: '#dbee00'
+      },
+    },
   }
+  
 );
 
 export default class App extends React.Component {

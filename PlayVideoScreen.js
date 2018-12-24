@@ -49,7 +49,6 @@ class PlayVideoScreen extends React.Component {
           backgroundColor: `${BACKGROUND_COLOR}`
         }}
       >
-        <Header />
         {this.state.isFullScreen ? null : (
           <View
             style={{
@@ -105,10 +104,10 @@ class PlayVideoScreen extends React.Component {
               success
               block
               onPress={() => {
-                this.props.navigation.navigate('IntroScreen');
+                this.props.navigation.navigate('HomeScreen');
               }}
             >
-              <Text>Go to IntroScreen</Text>
+              <Text>Go to HomeScreen</Text>
             </Button>
           </View>
         )}

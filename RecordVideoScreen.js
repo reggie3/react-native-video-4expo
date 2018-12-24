@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import VideoPlayer from 'react-native-video-player-no-linking';
 import { Text, Button, Container } from 'native-base';
 import { Video, ScreenOrientation } from 'expo';
@@ -37,6 +37,18 @@ class RecordVideoScreen extends React.Component {
     console.log({permissionsRetrievedCallbackRes});
   }
 
+  doNotTryAgainCallback=()=>{
+    console.log('Permissions denied');
+  }
+
+  onVideoRecorderError=(error)=>{
+    console.log({error});
+  }
+
+  onRecordingCompleteCallback=()=>{
+    console.log('onRecordingCompleteCallback called');
+  }
+
   render() {
     return (
       <Container
@@ -46,13 +58,33 @@ class RecordVideoScreen extends React.Component {
       >
         <VideoRecorder
         permissionsRetrievedCallback={this.permissionsRetrievedCallback}
+        doNotTryAgainCallback={this.doNotTryAgainCallback}
+        onError={this.onVideoRecorderError}
+        onRecordingCompleteCallback={this.onRecordingCompleteCallback}
         /* permissionsAlert={{
           display: true,
           title:  'Permissions Required',
           message: 'Camera permissions are required to add images to location.',
           tryAgainText: 'Try Again',
           doNotTryAgainText: 'OK'
-        }} */ />
+        }} */
+        activityIndicator={(renderProps)=>{
+          return (
+            <ActivityIndicator size="large" color="#0000ff"/>
+          )
+        }}
+        recordButton={(renderProps) => {
+          return (
+            <Button
+              onPress={renderProps.onPress}
+              block
+              success
+              style={{ marginVertical: 5 }}
+            >
+              <Text>Finish</Text>
+            </Button>
+          );
+        }} />
       </Container>
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Alert } from 'react-native';
+import { Text, View, Alert, ActivityIndicator } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import PropTypes from 'prop-types';
 
@@ -26,6 +26,10 @@ class VideoRecorder extends React.Component {
     if (permissionsRes.status !== 'granted') {
       //ask for permissions
       this.askForPermissions();
+    } else if (permissionsRes.status === 'granted') {
+      this.setState({ hasPermissions: true, showCamera: true });
+    } else {
+      this.props.onError('Error checking permissions');
     }
   };
 
@@ -75,7 +79,30 @@ class VideoRecorder extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Text>VideoRecorder</Text>
+        {this.state.showCamera ? (
+          <>
+            <Camera
+              style={{ flex: 1 }}
+              ref={(ref) => {
+                this.cameraRef = ref;
+              }}
+            />
+            {this.props.recordButton({
+              onPress: this.toggleRecord,
+              isRecording: this.state.isRecording
+            })}
+          </>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            {this.props.activityIndicator()}
+          </View>
+        )}
       </View>
     );
   }
@@ -95,16 +122,32 @@ VideoRecorder.propTypes = {
     title: PropTypes.string,
     message: PropTypes.string,
     tryAgainText: PropTypes.string,
-    doNotTryAgainText: PropTypes.string
-  })
+    doNotTryAgainText: PropTypes.string,
+    doNotTryAgainCallback: PropTypes.func
+  }),
+  activityIndicator: PropTypes.func,
+  onError: PropTypes.func,
+  onRecordingCompleteCallback: PropTypes.func
 };
 
 VideoRecorder.defaultProps = {
-    permissionsAlert: {
+  permissionsAlert: {
     display: true,
     title: 'Permissions Required',
     message: 'Camera permissions are required to add images to location.',
     tryAgainText: 'Try Again',
-    doNotTryAgainText: 'OK'
+    doNotTryAgainText: 'OK',
+    doNotTryAgainCallback: () => {
+      console.log('permissions denied');
+    }
+  },
+  activityIndicator: () => {
+    return <ActivityIndicator size="large" color="#00ff00" />;
+  },
+  onError: (error) => {
+    console.log({ error });
+  },
+  onRecordingCompleteCallback: (res) => {
+    console.log({ res });
   }
 };

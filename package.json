@@ -34,11 +34,14 @@
     "gulp-concat": "^2.6.1",
     "gulp-json-editor": "^2.4.1",
     "gulp-run": "^1.7.1",
+    "jest": "^23.6.0",
+    "jest-expo": "^31.0.0",
+    "react-native-testing-library": "^1.5.0",
     "regenerator-runtime": "^0.11.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reggie3/video-player-with-nav .git"
+    "url": "git+https://github.com/reggie3/react-native-video-recorder-4expo .git"
   },
   "keywords": [
     "react-native",
@@ -50,7 +53,13 @@
   "author": "Reginald Johnson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reggie3/video-player-with-nav /issues"
+    "url": "https://github.com/reggie3/react-native-video-recorder-4expo /issues"
   },
-  "homepage": "https://github.com/reggie3/video-player-with-nav #readme"
+  "homepage": "https://github.com/reggie3/react-native-video-recorder-4expo #readme",
+  "scripts": {
+    "test": "node_modules/.bin/jest"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  }
 }

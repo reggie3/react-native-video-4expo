@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import VideoPlayer from 'react-native-video-player-no-linking';
-import { Text, Button, Container } from 'native-base';
-import { Video, ScreenOrientation } from 'expo';
+import { ActivityIndicator } from 'react-native';
+import { Text, Button, Container, Icon } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import Header from './Header';
-import  VideoRecorder  from './VideoRecorder';
+import VideoRecorder from './VideoRecorder';
+import { Camera } from 'expo';
+
 const random_rgba = () => {
   var o = Math.round,
     r = Math.random,
@@ -22,34 +21,47 @@ const random_rgba = () => {
     ')'
   );
 };
-const BACKGROUND_COLOR = random_rgba();
 
+const BACKGROUND_COLOR = random_rgba();
 
 class RecordVideoScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
-
+    this.state = {};
   }
 
-  permissionsRetrievedCallback=(permissionsRetrievedCallbackRes)=>{
-    console.log({permissionsRetrievedCallbackRes});
-  }
+  permissionsRetrievedCallback = (permissionsRetrievedCallbackRes) => {
+    console.log({ permissionsRetrievedCallbackRes });
+  };
 
-  doNotTryAgainCallback=()=>{
+  doNotTryAgainCallback = () => {
     console.log('Permissions denied');
-  }
+  };
 
-  onVideoRecorderError=(error)=>{
-    console.log({error});
-  }
+  onVideoRecorderError = (error) => {
+    console.log({ error });
+  };
 
-  onRecordingCompleteCallback=()=>{
+  onRecordingCompleteCallback = () => {
     console.log('onRecordingCompleteCallback called');
-  }
+  };
+
+  onStartRecording = () => {
+    console.log('onStartRecording');
+  };
+
+  onStopRecording = () => {
+    console.log('onStopRecording');
+  };
+
+  onCloseVideoRecorder = (videoInfo) => {
+    console.log('onCloseVideoRecorder');
+    console.log({ videoInfo });
+    this.props.navigation.navigate('HomeScreen', { videoInfo });
+  };
 
   render() {
+
     return (
       <Container
         style={{
@@ -57,37 +69,137 @@ class RecordVideoScreen extends React.Component {
         }}
       >
         <VideoRecorder
-        permissionsRetrievedCallback={this.permissionsRetrievedCallback}
-        doNotTryAgainCallback={this.doNotTryAgainCallback}
-        onError={this.onVideoRecorderError}
-        onRecordingCompleteCallback={this.onRecordingCompleteCallback}
-        /* permissionsAlert={{
+          permissionsRetrievedCallback={this.permissionsRetrievedCallback}
+          doNotTryAgainCallback={this.doNotTryAgainCallback}
+          onError={this.onVideoRecorderError}
+          getVideoCallback={this.getVideoCallback}
+          recordingOptions= {{
+            maxDuration: 5,
+            quality: Camera.Constants.VideoQuality['720p']
+          }}
+          /* permissionsAlert={{
           display: true,
           title:  'Permissions Required',
           message: 'Camera permissions are required to add images to location.',
           tryAgainText: 'Try Again',
           doNotTryAgainText: 'OK'
         }} */
-        activityIndicator={(renderProps)=>{
-          return (
-            <ActivityIndicator size="large" color="#0000ff"/>
-          )
-        }}
-        recordButton={(renderProps) => {
-          return (
-            <Button
-              onPress={renderProps.onPress}
-              block
-              success
-              style={{ marginVertical: 5 }}
-            >
-              <Text>Finish</Text>
-            </Button>
-          );
-        }} />
+
+          activityIndicator={() => {
+            return <ActivityIndicator size="large" color="#0000ff" />;
+          }}
+          startRecordingButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                  this.onStartRecording();
+                }}
+                block
+                success
+                style={{ margin: 5 }}
+              >
+                <Text>Start Recording</Text>
+              </Button>
+            );
+          }}
+          stopRecordingButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                  this.onStopRecording();
+                }}
+                block
+                danger
+                style={{ margin: 5 }}
+              >
+                <Text>Stop Recording</Text>
+              </Button>
+            );
+          }}
+          closeVideoRecorderButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                  this.onCloseVideoRecorder(renderProps.videoInfo);
+                }}
+                block
+                info
+                style={{ margin: 5 }}
+              >
+                <Text>Go Back</Text>
+              </Button>
+            );
+          }}
+          flashOnButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                }}
+                info
+                style={buttonStyle}
+              >
+                <Icon type="MaterialIcons" name="flash-on" />
+              </Button>
+            );
+          }}
+          flashOffButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                }}
+                info
+                style={buttonStyle}
+              >
+                <Icon type="MaterialIcons" name="flash-off" />
+              </Button>
+            );
+          }}
+          flashAutoButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                }}
+                info
+                style={buttonStyle}
+              >
+                <Icon type="MaterialIcons" name="flash-auto" />
+              </Button>
+            );
+          }}
+          flashTorchButton={(renderProps) => {
+            return (
+              <Button
+                onPress={() => {
+                  renderProps.onPress();
+                }}
+                info
+                style={buttonStyle}
+              >
+                <Icon type="MaterialIcons" name="highlight" />
+              </Button>
+            );
+          }}
+          showTimer={true}
+          timer
+        />
       </Container>
     );
   }
 }
 
 export default withNavigation(RecordVideoScreen);
+
+const buttonStyle = {
+  width: 64,
+  height: 64,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 0
+};

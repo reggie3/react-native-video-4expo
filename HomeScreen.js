@@ -25,17 +25,28 @@ class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      videoInfo: null,
-      isVideoReady: false,
-      videoFileInfo: 'Video File Info Will Appear Here'
+      videoInfo: 'Video File Info Will Appear Here',
+      isVideoReady: false
     };
   }
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.videoInfo !== prevState.videoInfo) {
       console.log('video has updated');
-
       // do checks to see if the video is valid and update isVideoReady
+    }
+
+    // update the video info in state if it it has been passed, and if
+    // it is different from what we already have
+    if (
+      this.props.navigation.state.params.videoInfo &&
+      this.props.navigation.state.params.videoInfo !==
+        prevProps.navigation.state.params.videoInfo
+    ) {
+      console.log(this.props.navigation.state.params.videoInfo);
+      this.setState({
+        videoInfo: this.props.navigation.state.params.videoInfo
+      });
     }
   };
 
@@ -53,11 +64,16 @@ class HomeScreen extends React.Component {
           }}
         >
           <Text
-          style={{
-            backgroundColor: 'white',
-            flex: 1,
-            padding: 5
-          }}>{this.state.videoFileInfo} </Text>
+            style={{
+              backgroundColor: 'white',
+              flex: 1,
+              padding: 5
+            }}
+          >
+            {typeof this.state.videoInfo === 'object'
+              ? JSON.stringify(this.state.videoInfo)
+              : this.state.videoInfo}{' '}
+          </Text>
         </View>
         <Button
           success

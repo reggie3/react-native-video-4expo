@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import { Button, Text, Container } from 'native-base';
+import { FileSystem } from 'expo';
 
 const random_rgba = () => {
   var o = Math.round,
@@ -39,14 +40,28 @@ class HomeScreen extends React.Component {
     // update the video info in state if it it has been passed, and if
     // it is different from what we already have
     if (
-      this.props.navigation.state.params.videoInfo &&
-      this.props.navigation.state.params.videoInfo !==
-        prevProps.navigation.state.params.videoInfo
+      (this.props.navigation.state.params &&
+        this.props.navigation.state.params.videoInfo &&
+        !prevProps.navigation.state.params) ||
+      (this.props.navigation.state.params &&
+        this.props.navigation.state.params.videoInfo &&
+        this.props.navigation.state.params.videoInfo !==
+          prevProps.navigation.state.params.videoInfo)
     ) {
       console.log(this.props.navigation.state.params.videoInfo);
       this.setState({
-        videoInfo: this.props.navigation.state.params.videoInfo
+        videoInfo: this.props.navigation.state.params.videoInfo,
+        isVideoReady: true
       });
+    }
+  };
+
+  componentWillUnmount = async () => {
+    // delete the file on exit
+    console.log('deleting file');
+    if (this.state.isVideoReady) {
+      let deleteRes = await FileSystem.deleteAsync(this.state.videoInfo.uri);
+      console.log(deleteRes);
     }
   };
 
@@ -71,8 +86,8 @@ class HomeScreen extends React.Component {
             }}
           >
             {typeof this.state.videoInfo === 'object'
-              ? JSON.stringify(this.state.videoInfo)
-              : this.state.videoInfo}{' '}
+              ? JSON.stringify(this.state.videoInfo, null, 2)
+              : this.state.videoInfo}
           </Text>
         </View>
         <Button
@@ -91,7 +106,10 @@ class HomeScreen extends React.Component {
           block
           style={{ margin: 10 }}
           onPress={() => {
-            this.props.navigation.navigate('RecordVideoScreen');
+            console.log('sending: ', this.state.videoInfo);
+            this.props.navigation.navigate('PlayVideoScreen', {
+              videoInfo: this.state.videoInfo
+            });
           }}
         >
           <Text>Play Video</Text>

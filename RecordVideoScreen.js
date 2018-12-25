@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Text, Button, Container, Icon } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import VideoRecorder from './VideoRecorder';
@@ -55,8 +55,6 @@ class RecordVideoScreen extends React.Component {
   };
 
   onCloseVideoRecorder = (videoInfo) => {
-    console.log('onCloseVideoRecorder');
-    console.log({ videoInfo });
     this.props.navigation.navigate('HomeScreen', { videoInfo });
   };
 
@@ -74,7 +72,7 @@ class RecordVideoScreen extends React.Component {
           onError={this.onVideoRecorderError}
           getVideoCallback={this.getVideoCallback}
           recordingOptions= {{
-            maxDuration: 5,
+            maxDuration: 30,
             quality: Camera.Constants.VideoQuality['720p']
           }}
           /* permissionsAlert={{
@@ -186,7 +184,13 @@ class RecordVideoScreen extends React.Component {
             );
           }}
           showTimer={true}
-          timer
+          timerComponent={(renderProps)=> {
+            return (
+              <View style={{ background: 'rgba(0,0,0,.5' }}>
+                <Text style={{ color: 'white', fontSize: 20 }}>{renderProps.value}</Text>
+              </View>
+            );
+          }}
         />
       </Container>
     );
@@ -196,8 +200,8 @@ class RecordVideoScreen extends React.Component {
 export default withNavigation(RecordVideoScreen);
 
 const buttonStyle = {
-  width: 64,
-  height: 64,
+  width: 60,
+  height: 60,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

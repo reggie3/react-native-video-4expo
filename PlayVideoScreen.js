@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import VideoPlayer from 'react-native-video-player-no-linking';
 import { Text, Button, Container } from 'native-base';
 import { Video, ScreenOrientation } from 'expo';
 import { withNavigation } from 'react-navigation';
-import Header from './Header';
 
 const random_rgba = () => {
   var o = Math.round,
@@ -21,19 +20,39 @@ const random_rgba = () => {
     r().toFixed(1) +
     ')'
   );
-}; 
+};
 const BACKGROUND_COLOR = random_rgba();
-
-const URI =
-  'https://res.cloudinary.com/tourystory/video/upload/v1544021333/FACEBOOK-2138947072790494--d2a00850-f89c-11e8-81c6-d3965f15fa89/d39bf480-f89c-11e8-81c6-d3965f15fa89--d68bc170-f89c-11e8-81c6-d3965f15fa89.mp4';
 
 class PlayVideoScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFullScreen: false
+      isFullScreen: false,
+      videoInfo: {}
     };
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+    console.log('PlayVideoScreen initialized');
+  }
+
+  componentDidUpdate=(prevProps, prevState)=>{
+    debugger;
+    console.log('componentDidUpdate navigation: ', this.props.navigation);
+    if (
+      (this.props.navigation.state.params &&
+        this.props.navigation.state.params.videoInfo &&
+        !prevProps.navigation.state.params) ||
+      (this.props.navigation.state.params &&
+        this.props.navigation.state.params.videoInfo &&
+        this.props.navigation.state.params.videoInfo !==
+          prevProps.navigation.state.params.videoInfo)
+    ) {
+      console.log('player received video');
+      console.log(this.props.navigation.state.params.videoInfo);
+      this.setState({
+        videoInfo: this.props.navigation.state.params.videoInfo,
+        isVideoReady: true
+      });
+    }
   }
 
   toggleFullScreenCallback = () => {
@@ -42,13 +61,9 @@ class PlayVideoScreen extends React.Component {
     });
   };
 
-  render() {
+  renderPlayer = (uri) => {
     return (
-      <Container
-        style={{
-          backgroundColor: `${BACKGROUND_COLOR}`
-        }}
-      >
+      <View style={{ flex: 1 }}>
         {this.state.isFullScreen ? null : (
           <View
             style={{
@@ -75,7 +90,7 @@ class PlayVideoScreen extends React.Component {
               shouldPlay: true,
               resizeMode: Video.RESIZE_MODE_CONTAIN,
               source: {
-                uri: URI
+                uri
               }
             }}
             toggleFullScreenCallback={this.toggleFullScreenCallback}
@@ -109,6 +124,28 @@ class PlayVideoScreen extends React.Component {
             >
               <Text>Go to HomeScreen</Text>
             </Button>
+          </View>
+        )}
+      </View>
+    );
+  };
+  render() {
+    const { navigation } = this.props;
+    const videoInfo = navigation.getParam('videoInfo',null);
+    console.log(videoInfo);
+    return (
+      <Container
+        style={{
+          backgroundColor: `${BACKGROUND_COLOR}`
+        }}
+      >
+        {videoInfo !== null ? (
+          this.renderPlayer(videoInfo.uri)
+        ) : (
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <ActivityIndicator size="large" color="#0000ff" />
           </View>
         )}
       </Container>

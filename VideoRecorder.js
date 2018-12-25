@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 const flashStates = ['on', 'off', 'auto', 'torch'];
 const formattedSeconds = (sec) => {
-  Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2);
+  return (Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2));
 };
 
 class VideoRecorder extends React.Component {
@@ -27,8 +27,7 @@ class VideoRecorder extends React.Component {
       showCamera: false,
       flashState: flashStates[0],
       timer: null,
-      counter: '00',
-      miliseconds: '00'
+      secondsElapsed: 0
     };
   }
 
@@ -80,7 +79,7 @@ class VideoRecorder extends React.Component {
   async askForPermissions() {
     Permissions.askAsync(Permissions.CAMERA, Permissions.AUDIO_RECORDING)
       .then((res) => {
-        console.log({ res });
+        // console.log({ res });
         if (res.status === 'granted') {
           // update the permissions in app state so that the callback
           // can reference the correct values next time it is called
@@ -108,14 +107,18 @@ class VideoRecorder extends React.Component {
         let recordingRes = await this.cameraRef.recordAsync(
           this.props.recordingOptions
         );
-        console.log({ recordingRes });
-        let fileInfoRes = FileSystem.getInfoAsync(recordingRes.uri);
-        console.log({ fileInfoRes });
+
+        // stop the timer
+        clearInterval(this.state.timer);
+
+        // get the file size
+        let fileInfoRes = await FileSystem.getInfoAsync(recordingRes.uri);
         this.setState({
           videoInfo: {
             ...recordingRes,
             size: fileInfoRes.size,
-            created: fileInfoRes.modificationTime
+            created: fileInfoRes.modificationTime,
+            duration: this.state.secondsElapsed * 1000
           }
         });
         this.setState({
@@ -148,7 +151,7 @@ class VideoRecorder extends React.Component {
         }),
       1000
     );
-    this.setState({ timer });
+    this.setState({ timer, secondsElapsed: 0 });
   };
 
   onStopRecord = () => {
@@ -182,7 +185,7 @@ class VideoRecorder extends React.Component {
           padding: 5,
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-end'
+          justifyContent: 'space-between'
         }}
       >
         {this.props.showTimer ? this.renderTimer() : null}
@@ -193,7 +196,8 @@ class VideoRecorder extends React.Component {
 
   renderTimer = () => {
     return this.props.timerComponent({
-      value: this.state.secondsElapse
+      value: formattedSeconds(this.state.secondsElapsed),
+      isRecording: this.state.isRecording
     });
   };
 
@@ -398,9 +402,13 @@ VideoRecorder.defaultProps = {
       </TouchableHighlight>
     );
   },
-showTimer: true,
+  showTimer: true,
   timerComponent: ({ value }) => {
-    return <Text style={{ color: 'white' }}>{formattedSeconds(value)}</Text>;
+    return (
+      <View style={{ background: 'rgba(0,0,0,.5' }}>
+        <Text style={{ color: 'white' }}>{value}</Text>
+      </View>
+    );
   }
 };
 

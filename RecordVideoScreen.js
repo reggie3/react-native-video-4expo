@@ -2,8 +2,9 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Text, Button, Container, Icon } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import {VideoRecorder} from './index';
+import { VideoRecorder } from './index';
 import { Camera } from 'expo';
+import * as styles from './styles';
 
 const random_rgba = () => {
   var o = Math.round,
@@ -59,7 +60,6 @@ class RecordVideoScreen extends React.Component {
   };
 
   render() {
-
     return (
       <Container
         style={{
@@ -71,14 +71,14 @@ class RecordVideoScreen extends React.Component {
           doNotTryAgainCallback={this.doNotTryAgainCallback}
           onError={this.onVideoRecorderError}
           getVideoCallback={this.getVideoCallback}
-          recordingOptions= {{
+          recordingOptions={{
             maxDuration: 30,
             quality: Camera.Constants.VideoQuality['720p']
           }}
-           denyPermissionRequestCallback={()=>{
+          denyPermissionRequestCallback={() => {
             console.log('request for permissions denied');
             this.props.navigation.goBack();
-          }} 
+          }}
           /* permissionsAlert={{
           display: true,
           title:  'Permissions Required',
@@ -87,39 +87,42 @@ class RecordVideoScreen extends React.Component {
           doNotTryAgainText: 'OK'
         }} */
 
-          activityIndicator={() => {
-            return <ActivityIndicator size="large" color="#0000ff" />;
-          }}
-          startRecordingButton={(renderProps) => {
+         /*  activityIndicator={() => {
+            return <ActivityIndicator size="large" color="#00ff00" />;
+          }} */
+          /* startRecordingButton={(renderProps) => {
             return (
               <Button
                 onPress={() => {
                   renderProps.onPress();
                   this.onStartRecording();
                 }}
-                block
-                success
-                style={{ margin: 5 }}
-              >
-                <Text>Start Recording</Text>
-              </Button>
+                danger
+                style={{
+                  ...styles.bigButtonStyle,
+                  backgroundColor: 'red',
+                  borderWidth: 6,
+                  borderColor: 'lightgray'
+                }}
+              />
             );
-          }}
-          stopRecordingButton={(renderProps) => {
+          }} */
+          /* stopRecordingButton={(renderProps) => {
             return (
               <Button
                 onPress={() => {
                   renderProps.onPress();
                   this.onStopRecording();
                 }}
-                block
-                danger
-                style={{ margin: 5 }}
-              >
-                <Text>Stop Recording</Text>
-              </Button>
+                style={{
+                  ...styles.bigButtonStyle,
+                  border: 3,
+                  backgroundColor: 'lightgray',
+                  borderColor: 'white'
+                }}
+              />
             );
-          }}
+          }} */
           closeVideoRecorderButton={(renderProps) => {
             return (
               <Button
@@ -142,7 +145,7 @@ class RecordVideoScreen extends React.Component {
                   renderProps.onPress();
                 }}
                 info
-                style={buttonStyle}
+                style={styles.flashButtonStyle}
               >
                 <Icon type="MaterialIcons" name="flash-on" />
               </Button>
@@ -155,7 +158,7 @@ class RecordVideoScreen extends React.Component {
                   renderProps.onPress();
                 }}
                 info
-                style={buttonStyle}
+                style={styles.flashButtonStyle}
               >
                 <Icon type="MaterialIcons" name="flash-off" />
               </Button>
@@ -168,7 +171,7 @@ class RecordVideoScreen extends React.Component {
                   renderProps.onPress();
                 }}
                 info
-                style={buttonStyle}
+                style={styles.flashButtonStyle}
               >
                 <Icon type="MaterialIcons" name="flash-auto" />
               </Button>
@@ -181,17 +184,19 @@ class RecordVideoScreen extends React.Component {
                   renderProps.onPress();
                 }}
                 info
-                style={buttonStyle}
+                style={styles.flashButtonStyle}
               >
                 <Icon type="MaterialIcons" name="highlight" />
               </Button>
             );
           }}
           showTimer={true}
-          timerComponent={(renderProps)=> {
+          timerComponent={(renderProps) => {
             return (
               <View style={{ background: 'rgba(0,0,0,.5' }}>
-                <Text style={{ color: 'white', fontSize: 20 }}>{renderProps.value}</Text>
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                  {renderProps.value}
+                </Text>
               </View>
             );
           }}
@@ -202,12 +207,3 @@ class RecordVideoScreen extends React.Component {
 }
 
 export default withNavigation(RecordVideoScreen);
-
-const buttonStyle = {
-  width: 60,
-  height: 60,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 0
-};

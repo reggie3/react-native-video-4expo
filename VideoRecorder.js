@@ -4,15 +4,15 @@ import {
   View,
   Alert,
   ActivityIndicator,
-  TouchableHighlight,
-  StyleSheet
+  TouchableHighlight
 } from 'react-native';
 import { Camera, Permissions, FileSystem } from 'expo';
 import PropTypes from 'prop-types';
+import * as styles from './styles';
 
 const flashStates = ['on', 'off', 'auto', 'torch'];
 const formattedSeconds = (sec) => {
-  return (Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2));
+  return Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2);
 };
 
 class VideoRecorder extends React.Component {
@@ -84,13 +84,15 @@ class VideoRecorder extends React.Component {
           // update the permissions in app state so that the callback
           // can reference the correct values next time it is called
           this.setState({ hasPermissions: true, showCamera: true });
-          this.props.permissionsRetrievedCallback ? this.props.permissionsRetrievedCallback(res) : null;
+          this.props.permissionsRetrievedCallback
+            ? this.props.permissionsRetrievedCallback(res)
+            : null;
         } else {
           this.showPermissionsAlert();
         }
       })
       .catch((err) => {
-          console.log({err});
+        console.log({ err });
         this.showPermissionsAlert();
       });
   }
@@ -277,7 +279,6 @@ class VideoRecorder extends React.Component {
     );
   };
 
-
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -339,8 +340,8 @@ VideoRecorder.propTypes = {
   onError: PropTypes.func,
 
   // UI elements
-  startRecordingButton: PropTypes.func.isRequired,
-  stopRecordingButton: PropTypes.func.isRequired,
+  startRecordingButton: PropTypes.func,
+  stopRecordingButton: PropTypes.func,
   closeVideoRecorderButton: PropTypes.func.isRequired,
 
   // Flash control UI elements
@@ -371,12 +372,12 @@ VideoRecorder.defaultProps = {
     }
   },
 
-  denyPermissionRequestCallback: ()=>{
+  denyPermissionRequestCallback: () => {
     console.log('request for permissions denied');
   },
 
   activityIndicator: () => {
-    return <ActivityIndicator size="large" color="#00ff00" />;
+    return <ActivityIndicator size="large" color="#0000ff" />;
   },
   onError: (error) => {
     console.log({ error });
@@ -384,6 +385,40 @@ VideoRecorder.defaultProps = {
   recordingOptions: {
     maxDuration: 5,
     quality: Camera.Constants.VideoQuality['720p']
+  },
+
+  startRecordingButton: ({ onPress }) => {
+    return (
+      <TouchableHighlight
+        style={styles.defaultTouchableHighlight}
+        onPress={onPress}
+        underlayColor="#E0E0E0"
+      >
+        <Text style={styles.defaultText}>Record</Text>
+      </TouchableHighlight>
+    );
+  },
+  stopRecordingButton: ({ onPress }) => {
+    return (
+      <TouchableHighlight
+        style={styles.defaultTouchableHighlight}
+        onPress={onPress}
+        underlayColor="#E0E0E0"
+      >
+        <Text style={styles.defaultText}>Stop Recording</Text>
+      </TouchableHighlight>
+    );
+  },
+  closeVideoRecorderButton: ({ onPress }) => {
+    return (
+      <TouchableHighlight
+        style={styles.defaultTouchableHighlight}
+        onPress={onPress}
+        underlayColor="#E0E0E0"
+      >
+        <Text style={styles.defaultText}>Go Back</Text>
+      </TouchableHighlight>
+    );
   },
   flashOnButton: ({ onPress }) => {
     return (
@@ -422,12 +457,3 @@ VideoRecorder.defaultProps = {
     );
   }
 };
-
-const styles = StyleSheet.create({
-  defaultButton: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    color: 'black'
-  }
-});

@@ -126,7 +126,7 @@ class PlayVideoScreen extends React.Component {
         >
           <VideoPlayer
             source={{
-              uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
+              uri: this.props.navigation.state.params.videoInfo.uri
             }}
             useNativeControls={false}
             resizeMode={Video.RESIZE_MODE_COVER}
@@ -152,7 +152,7 @@ class PlayVideoScreen extends React.Component {
             onPlaybackStatusUpdateCallback={(playbackStatus) => {
               // console.log({playbackStatus});
             }}
-            /* playButton={(renderProps) => {
+             playButton={(renderProps) => {
               return (
                 <Button
                   onPress={renderProps.onPress}
@@ -269,7 +269,7 @@ class PlayVideoScreen extends React.Component {
                   />
                 </TouchableOpacity>
               );
-            }} */
+            }} 
           />
         </View>
         {this.state.isFullScreen ? null : (

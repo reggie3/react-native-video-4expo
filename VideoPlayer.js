@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
-  Button,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -11,6 +10,7 @@ import {
 import { Video } from 'expo';
 import PropTypes from 'prop-types';
 import * as Animatable from 'react-native-animatable';
+import * as styles from './styles';
 
 // Don't show the Spinner for very short periods of buffering
 const CONTROL_FADE_DURATION = 200;
@@ -137,7 +137,8 @@ class VideoPlayer extends React.Component {
   };
 
   onPlaybackStatusUpdate = (playbackStatus) => {
-    /* this.props.debug && */ console.log('in playbackStatusUpdate: ', { playbackStatus });
+    this.props.debug &&
+      console.log('in playbackStatusUpdate: ', { playbackStatus });
     this.setState({ playbackStatus });
     try {
       this.props.onPlaybackStatusUpdateCallback(playbackStatus);
@@ -187,19 +188,19 @@ class VideoPlayer extends React.Component {
                 'You are probably offline. Please make sure you are connected to the Internet to watch this video'
             });
           } else {
-            console.log({
+            /* console.log({
               controlDisplayState1: this.state.controlDisplayState
-            });
+            }); */
             /* if (
               this.state.controlDisplayState !== CONTROL_STATES.SHOWN 
             ) { */
-              console.log({
+            /* console.log({
                 controlDisplayState2: this.state.controlDisplayState
-              });
-              this.setPlaybackState(
-                this.isPlayingOrBufferingOrPaused(playbackStatus)
-              );
-           // }
+              }); */
+            this.setPlaybackState(
+              this.isPlayingOrBufferingOrPaused(playbackStatus)
+            );
+            // }
           }
         }
       }
@@ -595,7 +596,7 @@ VideoPlayer.defaultProps = {
       <TouchableOpacity
         onPress={renderProps.onPress}
         success
-        style={bigButtonStyle}
+        style={styles.bigButtonStyle}
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'>'}</Text>
       </TouchableOpacity>
@@ -605,7 +606,7 @@ VideoPlayer.defaultProps = {
     return (
       <TouchableOpacity
         success
-        style={bigButtonStyle}
+        style={styles.bigButtonStyle}
         onPress={renderProps.onPress}
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'||'}</Text>
@@ -617,7 +618,7 @@ VideoPlayer.defaultProps = {
       <TouchableOpacity
         onPress={renderProps.onPress}
         success
-        style={buttonStyle}
+        style={styles.buttonStyle}
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'>>'}</Text>
       </TouchableOpacity>
@@ -628,7 +629,7 @@ VideoPlayer.defaultProps = {
       <TouchableOpacity
         onPress={renderProps.onPress}
         success
-        style={buttonStyle}
+        style={styles.buttonStyle}
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'<<'}</Text>
       </TouchableOpacity>
@@ -639,7 +640,7 @@ VideoPlayer.defaultProps = {
       <TouchableOpacity
         onPress={renderProps.onPress}
         success
-        style={bigButtonStyle}
+        style={styles.bigButtonStyle}
       >
         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{'|<<'}</Text>
       </TouchableOpacity>
@@ -661,7 +662,7 @@ VideoPlayer.defaultProps = {
   timeStamp: (renderProps) => {
     return (
       <View style={{ background: 'rgba(0,0,0,.5)', marginHorizontal: 5 }}>
-        <Text style={{ color: 'white', fontSize: 20 }}>
+        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
           {renderProps.value}
         </Text>
       </View>
@@ -669,37 +670,9 @@ VideoPlayer.defaultProps = {
   },
   fullScreenButton: (renderProps) => {
     return (
-      <TouchableOpacity onPress={renderProps.onPress} style={smallButtonStyle}>
+      <TouchableOpacity onPress={renderProps.onPress} style={styles.smallButtonStyle}>
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{'^'}</Text>
       </TouchableOpacity>
     );
   }
-};
-const buttonTemplate = {
-  alignSelf: 'center',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'white'
-};
-
-const bigButtonStyle = {
-  ...buttonTemplate,
-  width: 72,
-  height: 72,
-  borderRadius: 36
-};
-
-const buttonStyle = {
-  ...buttonTemplate,
-  width: 64,
-  height: 64,
-  borderRadius: 32
-};
-
-const smallButtonStyle = {
-  ...buttonTemplate,
-  width: 24,
-  height: 24,
-  borderRadius: 12
 };

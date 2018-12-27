@@ -1,7 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import VideoPlayer from 'react-native-video-player-no-linking';
-import { Text, Button, Container } from 'native-base';
+import {
+  Slider,
+  View,
+  ActivityIndicator,
+  TouchableOpacity
+} from 'react-native';
+import { VideoPlayer } from './index';
+import { Text, Button, Container, Icon } from 'native-base';
 import { Video, ScreenOrientation } from 'expo';
 import { withNavigation } from 'react-navigation';
 
@@ -21,7 +26,37 @@ const random_rgba = () => {
     ')'
   );
 };
+
 const BACKGROUND_COLOR = random_rgba();
+const ICON_SIZE = 40;
+
+const buttonTemplate = {
+  alignSelf: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
+};
+
+const bigButtonStyle = {
+  ...buttonTemplate,
+  width: 72,
+  height: 72,
+  borderRadius: 36
+};
+
+const buttonStyle = {
+  ...buttonTemplate,
+  width: 64,
+  height: 64,
+  borderRadius: 32
+};
+
+const smallButtonStyle = {
+  ...buttonTemplate,
+  width: 24,
+  height: 24,
+  borderRadius: 12
+};
 
 class PlayVideoScreen extends React.Component {
   constructor(props) {
@@ -34,7 +69,7 @@ class PlayVideoScreen extends React.Component {
     console.log('PlayVideoScreen initialized');
   }
 
-  componentDidUpdate=(prevProps, prevState)=>{
+  componentDidUpdate = (prevProps, prevState) => {
     debugger;
     console.log('componentDidUpdate navigation: ', this.props.navigation);
     if (
@@ -53,12 +88,16 @@ class PlayVideoScreen extends React.Component {
         isVideoReady: true
       });
     }
-  }
+  };
 
   toggleFullScreenCallback = () => {
     this.setState({ isFullScreen: !this.state.isFullScreen }, () => {
       console.log({ isFullScreen: this.state.isFullScreen });
     });
+  };
+
+  onVideoPlayerError = (error) => {
+    console.log({ error });
   };
 
   renderPlayer = (uri) => {
@@ -79,28 +118,158 @@ class PlayVideoScreen extends React.Component {
         )}
         <View
           style={{
-            backgroundColor: 'rgba(25,100,255,0)',
+            backgroundColor: 'black',
             padding: 15,
             display: 'flex',
             flex: 2
           }}
         >
           <VideoPlayer
-            videoProps={{
-              shouldPlay: true,
-              resizeMode: Video.RESIZE_MODE_CONTAIN,
-              source: {
-                uri
-              }
+            source={{
+              uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
             }}
-            toggleFullScreenCallback={this.toggleFullScreenCallback}
+            useNativeControls={false}
+            resizeMode={Video.RESIZE_MODE_COVER}
+            positionMillis={0}
+            isLooping={true}
+            debug={false}
+            onError={this.onVideoPlayerError}
+            toggleFullScreenCallback={(isFullScreen) => {
+              console.log({ isFullScreen });
+            }}
             playCompleteCallback={() => {
               console.log('play complete');
             }}
-            playFromPositionMillis={0}
-            isLooping={false}
+            onLoadStart={() => {
+              console.log('onLoadStart');
+            }}
+            onLoad={(playbackStatus) => {
+              console.log('onLoad', playbackStatus);
+            }}
+            onReadyForDisplayCallback={(videoInfo) => {
+              console.log('video ready for display: ', videoInfo);
+            }}
+            onPlaybackStatusUpdateCallback={(playbackStatus) => {
+              // console.log({playbackStatus});
+            }}
+            /* playButton={(renderProps) => {
+              return (
+                <Button
+                  onPress={renderProps.onPress}
+                  success
+                  style={bigButtonStyle}
+                >
+                  <Icon
+                    type="FontAwesome"
+                    name="play"
+                    color="white"
+                    style={{ fontSize: ICON_SIZE }}
+                  />
+                </Button>
+              );
+            }}
+            pauseButton={(renderProps) => {
+              return (
+                <Button
+                  success
+                  style={bigButtonStyle}
+                  onPress={renderProps.onPress}
+                >
+                  <Icon
+                    type="FontAwesome"
+                    name="pause"
+                    color="white"
+                    style={{ fontSize: ICON_SIZE }}
+                  />
+                </Button>
+              );
+            }}
+            fastForwardButton={(renderProps) => {
+              return (
+                <Button
+                  onPress={renderProps.onPress}
+                  success
+                  style={buttonStyle}
+                >
+                  <Icon
+                    type="FontAwesome"
+                    name="forward"
+                    color="white"
+                    style={{ fontSize: ICON_SIZE - 10 }}
+                  />
+                </Button>
+              );
+            }}
+            rewindButton={(renderProps) => {
+              return (
+                <Button
+                  onPress={renderProps.onPress}
+                  success
+                  style={buttonStyle}
+                >
+                  <Icon
+                    type="FontAwesome"
+                    name="backward"
+                    color="white"
+                    style={{ fontSize: ICON_SIZE - 10 }}
+                  />
+                </Button>
+              );
+            }}
+            repeatVideoButton={(renderProps) => {
+              return (
+                <Button
+                  onPress={renderProps.onPress}
+                  success
+                  style={bigButtonStyle}
+                >
+                  <Icon
+                    type="FontAwesome"
+                    name="fast-backward"
+                    color="white"
+                    style={{ fontSize: ICON_SIZE }}
+                  />
+                </Button>
+              );
+            }}
+            playbackSlider={(renderProps) => {
+              return (
+                <Slider
+                  minimumValue={renderProps.minimumValue}
+                  maximumValue={renderProps.maximumValue}
+                  value={renderProps.value}
+                  onSlidingComplete={renderProps.onSlidingComplete}
+                  onValueChange={renderProps.onValueChange}
+                  disabled={renderProps.disabled}
+                />
+              );
+            }}
             showTimeStamp={true}
-            playerPadding={10}
+            timeStamp={(renderProps) => {
+              return (
+                <View
+                  style={{ background: 'rgba(0,0,0,.5)', marginHorizontal: 5 }}
+                >
+                  <Text style={{ color: 'white', fontSize: 20 }}>
+                    {renderProps.value}
+                  </Text>
+                </View>
+              );
+            }}
+            fullScreenButton={(renderProps) => {
+              return (
+                <TouchableOpacity
+                  onPress={renderProps.onPress}
+                  style={smallButtonStyle}
+                >
+                  <Icon
+                    type="Ionicons"
+                    name="expand"
+                    style={{ fontSize: 20, color: 'white' }}
+                  />
+                </TouchableOpacity>
+              );
+            }} */
           />
         </View>
         {this.state.isFullScreen ? null : (
@@ -131,7 +300,7 @@ class PlayVideoScreen extends React.Component {
   };
   render() {
     const { navigation } = this.props;
-    const videoInfo = navigation.getParam('videoInfo',null);
+    const videoInfo = navigation.getParam('videoInfo', null);
     console.log(videoInfo);
     return (
       <Container

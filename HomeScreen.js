@@ -27,8 +27,11 @@ class HomeScreen extends React.Component {
     super(props);
     this.state = {
       videoInfo: 'Video File Info Will Appear Here',
-      isVideoReady: false
+      isVideoReady: true
     };
+    this.props.navigation.navigate('PlayVideoScreen', {
+     videoInfo: this.state.videoInfo
+    });
   }
 
   componentDidUpdate = (prevProps, prevState) => {

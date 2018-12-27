@@ -65,7 +65,7 @@ class VideoRecorder extends React.Component {
         {
           text: this.props.permissionsAlert.doNotTryAgainText,
           onPress: () => {
-            this.renderProps.onMediaSelectionCanceled();
+            this.props.denyPermissionRequestCallback();
           }
         }
       ],
@@ -79,17 +79,18 @@ class VideoRecorder extends React.Component {
   async askForPermissions() {
     Permissions.askAsync(Permissions.CAMERA, Permissions.AUDIO_RECORDING)
       .then((res) => {
-        // console.log({ res });
+        console.log({ res });
         if (res.status === 'granted') {
           // update the permissions in app state so that the callback
           // can reference the correct values next time it is called
           this.setState({ hasPermissions: true, showCamera: true });
-          this.permissionsRetrievedCallback(res);
+          this.props.permissionsRetrievedCallback ? this.props.permissionsRetrievedCallback(res) : null;
         } else {
           this.showPermissionsAlert();
         }
       })
       .catch((err) => {
+          console.log({err});
         this.showPermissionsAlert();
       });
   }
@@ -275,6 +276,8 @@ class VideoRecorder extends React.Component {
       </View>
     );
   };
+
+
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -313,6 +316,10 @@ VideoRecorder.propTypes = {
   // permissionsRetrievedCallback: function called when permssions are successfully retrieved
   // receives permssions respons as argument
   permissionsRetrievedCallback: PropTypes.func,
+
+  // denyPermissionRequestCallback: function called if user denies granting permissions
+  // when the alert box requests it again
+  denyPermissionRequestCallback: PropTypes.func,
 
   // permissionsAlert: properties controlling alert that pops up if user
   // does not grant required permissions
@@ -362,6 +369,10 @@ VideoRecorder.defaultProps = {
     doNotTryAgainCallback: () => {
       console.log('permissions denied');
     }
+  },
+
+  denyPermissionRequestCallback: ()=>{
+    console.log('request for permissions denied');
   },
 
   activityIndicator: () => {

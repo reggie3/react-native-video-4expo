@@ -1,2 +1,7 @@
 import VideoRecorder from './VideoRecorder';
-export default VideoRecorder;
+import VideoPlayer from './VideoPlayer';
+
+module.exports = {
+    VideoRecorder,
+    VideoPlayer
+  };

@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Text, Button, Container, Icon } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import VideoRecorder from './VideoRecorder';
+import {VideoRecorder} from './index';
 import { Camera } from 'expo';
 
 const random_rgba = () => {
@@ -75,6 +75,10 @@ class RecordVideoScreen extends React.Component {
             maxDuration: 30,
             quality: Camera.Constants.VideoQuality['720p']
           }}
+           denyPermissionRequestCallback={()=>{
+            console.log('request for permissions denied');
+            this.props.navigation.goBack();
+          }} 
           /* permissionsAlert={{
           display: true,
           title:  'Permissions Required',

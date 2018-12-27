@@ -1,9 +1,9 @@
 {
   "main": "node_modules/expo/AppEntry.js",
-  "name": "react-native-video-recorder-4expo",
+  "name": "react-native-video-4expo",
   "private": false,
   "version": "0.0.1",
-  "description": "Test app for react-native-video-recorder-4expo.",
+  "description": "Provides video recorder and player components using the Expo SDK.",
   "dependencies": {
     "expo": "^31.0.0",
     "native-base": "^2.8.2",

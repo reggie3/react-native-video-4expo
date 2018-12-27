@@ -27,7 +27,8 @@ class VideoRecorder extends React.Component {
       showCamera: false,
       flashState: flashStates[0],
       timer: null,
-      secondsElapsed: 0
+      secondsElapsed: 0,
+      videoInfo: null
     };
   }
 
@@ -48,6 +49,13 @@ class VideoRecorder extends React.Component {
         hasError: true,
         message: 'Error: checking permissions'
       });
+    }
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    // the user just finished recording a video
+    if (this.state.videoInfo && !prevProps.videoInfo) {
+        this.props.videoIsAvailableCallback(this.state.videoInfo)
     }
   };
 
@@ -285,6 +293,7 @@ class VideoRecorder extends React.Component {
         {this.state.showCamera ? (
           <>
             <Camera
+              {...this.props}
               style={{ flex: 1 }}
               type={this.state.type}
               flashMode={this.state.flashState}
@@ -321,6 +330,8 @@ VideoRecorder.propTypes = {
   // denyPermissionRequestCallback: function called if user denies granting permissions
   // when the alert box requests it again
   denyPermissionRequestCallback: PropTypes.func,
+  // videoIsAvailableCallback: function called when a recording completes
+  videoIsAvailableCallback: PropTypes.func,
 
   // permissionsAlert: properties controlling alert that pops up if user
   // does not grant required permissions
@@ -343,6 +354,8 @@ VideoRecorder.propTypes = {
   startRecordingButton: PropTypes.func,
   stopRecordingButton: PropTypes.func,
   closeVideoRecorderButton: PropTypes.func.isRequired,
+  // FIXME: add flip camera controls
+  // FIXME: add video quality controls
 
   // Flash control UI elements
   flashOnButton: PropTypes.func,
@@ -361,20 +374,13 @@ VideoRecorder.propTypes = {
 };
 
 VideoRecorder.defaultProps = {
-  permissionsAlert: {
-    display: true,
-    title: 'Permissions Required',
-    message: 'Camera permissions are required to add images to location.',
-    tryAgainText: 'Try Again',
-    doNotTryAgainText: 'OK',
-    doNotTryAgainCallback: () => {
-      console.log('permissions denied');
-    }
-  },
-
+  permissionsRetrievedCallback: () => {},
   denyPermissionRequestCallback: () => {
     console.log('request for permissions denied');
   },
+  videoIsAvailableCallback: () => {},
+
+
 
   activityIndicator: () => {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -455,5 +461,15 @@ VideoRecorder.defaultProps = {
         <Text style={{ color: 'white' }}>{value}</Text>
       </View>
     );
-  }
+  },
+  permissionsAlert: {
+    display: true,
+    title: 'Permissions Required',
+    message: 'Camera permissions are required to add images to location.',
+    tryAgainText: 'Try Again',
+    doNotTryAgainText: 'OK',
+    doNotTryAgainCallback: () => {
+      console.log('permissions denied');
+    }
+  },
 };

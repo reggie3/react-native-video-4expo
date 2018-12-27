@@ -70,7 +70,6 @@ class PlayVideoScreen extends React.Component {
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    debugger;
     console.log('componentDidUpdate navigation: ', this.props.navigation);
     if (
       (this.props.navigation.state.params &&
@@ -127,10 +126,10 @@ class PlayVideoScreen extends React.Component {
           <VideoPlayer
             source={{
               uri: this.props.navigation.state.params.videoInfo.uri
-            }}
-            useNativeControls={false}
-            resizeMode={Video.RESIZE_MODE_COVER}
-            positionMillis={0}
+            }} 
+            useNativeControls={true}
+            resizeMode={Video.RESIZE_MODE_CONTAIN} 
+            positionMillis={1500}
             isLooping={true}
             debug={false}
             onError={this.onVideoPlayerError}

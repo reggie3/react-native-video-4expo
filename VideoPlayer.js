@@ -494,13 +494,14 @@ class VideoPlayer extends React.Component {
             ref={(component) => {
               this.videoRef = component;
             }}
-            source={this.props.source}
+            
             useNativeControls={this.props.useNativeControls}
+            resizeMode={this.props.resizeMode}
             positionMillis={this.props.positionMillis}
+            source={this.props.source}
             rate={1.0}
             volume={1.0}
             isMuted={false}
-            resizeMode={this.props.resizeMode}
             shouldPlay={this.props.shouldPlay}
             isLooping={this.props.isLooping}
             style={{ ...StyleSheet.absoluteFillObject }}
@@ -510,8 +511,9 @@ class VideoPlayer extends React.Component {
             onLoad={this.props.onLoad}
             onError={this.props.onError}
           />
-          {this.maybeRenderControls()}
-          {this.maybeRenderStatusBar()}
+          
+          {this.props.useNativeControls ? null: this.maybeRenderControls()}
+          {this.props.useNativeControls ? null: this.maybeRenderStatusBar()}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -670,7 +672,10 @@ VideoPlayer.defaultProps = {
   },
   fullScreenButton: (renderProps) => {
     return (
-      <TouchableOpacity onPress={renderProps.onPress} style={styles.smallButtonStyle}>
+      <TouchableOpacity
+        onPress={renderProps.onPress}
+        style={styles.smallButtonStyle}
+      >
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{'^'}</Text>
       </TouchableOpacity>
     );

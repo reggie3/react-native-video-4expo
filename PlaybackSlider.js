@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet, Slider } from 'react-native';
-// import Slider from 'react-native-slider';
 
 const PlaybackSlider = (props) => {
   return (

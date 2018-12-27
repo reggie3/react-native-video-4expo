@@ -137,7 +137,7 @@ class RecordVideoScreen extends React.Component {
                 <Text>Go Back</Text>
               </Button>
             );
-          }}
+          }}/*
           flashOnButton={(renderProps) => {
             return (
               <Button
@@ -199,7 +199,7 @@ class RecordVideoScreen extends React.Component {
                 </Text>
               </View>
             );
-          }}
+          }}*/
         />
       </Container>
     );

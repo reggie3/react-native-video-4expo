@@ -9,7 +9,6 @@ const run = require('gulp-run');
 const npmDeps = {
     "prop-types": "15.6.2",
     "react-native-blink-view": "0.0.6",
-    "react-native-slider": "^0.11.0",
     "native-base": "^2.8.1",
     "react-native-animatable": "^1.3.0",
 };
@@ -18,7 +17,8 @@ const npmDeps = {
 const expoDeps = {
   expo: '^31.0.0',
   react: '16.5.0',
-  'react-native': `https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz`
+  'react-native': `https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz`,
+  "react-navigation": "^2.18.2"
 };
 
 // main for npm publishing

@@ -28,7 +28,7 @@ class VideoRecorder extends React.Component {
       flashState: flashStates[0],
       timer: null,
       secondsElapsed: 0,
-      videoInfo: null
+      videoInfo: {}
     };
   }
 

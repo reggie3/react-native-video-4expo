@@ -139,8 +139,8 @@ class RecordVideoScreen extends React.Component {
                 }
                 success={
                   !renderProps.isRecording &&
-                  (renderProps.hasOwnProperty('videoInfo') /* &&
-                    renderProps.videoInfo.hasOwnProperty('uri') */)
+                  (renderProps.hasOwnProperty('videoInfo') &&
+                    renderProps.videoInfo.hasOwnProperty('uri') )
                 }
                 style={{ margin: 5 }}
               >
@@ -149,8 +149,8 @@ class RecordVideoScreen extends React.Component {
                 ) : null}
                 {!renderProps.isRecording ? (
                   <Text style={styles.buttonText}>
-                    {renderProps.hasOwnProperty('videoInfo')/*  &&
-                    renderProps.videoInfo.hasOwnProperty('uri') */
+                    {renderProps.hasOwnProperty('videoInfo')  &&
+                    renderProps.videoInfo.hasOwnProperty('uri') 
                       ? 'Save Video'
                       : 'Go Back'}
                   </Text>

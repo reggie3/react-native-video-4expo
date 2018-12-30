@@ -2,7 +2,7 @@
   "main": "index.js",
   "name": "react-native-video-4expo",
   "private": false,
-  "version": "0.0.12",
+  "version": "0.0.14",
   "description": "Provides video recorder and player components using the Expo SDK.",
   "dependencies": {
     "prop-types": "15.6.2",

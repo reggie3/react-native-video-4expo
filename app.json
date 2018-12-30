@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "React Native Video 4 Expo",
-    "description": "Video Player and  Recorder components that supports custom UI buttons.",
+    "description": "Video Player and Recorder components that supports custom UI buttons.",
     "slug": "react-native-video-4expo",
     "privacy": "public",
     "sdkVersion": "31.0.0",

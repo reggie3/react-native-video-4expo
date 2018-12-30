@@ -124,6 +124,7 @@ class RecordVideoScreen extends React.Component {
             );
           }} */
           closeVideoRecorderButton={(renderProps) => {
+            console.log({ renderProps });
             return (
               <Button
                 onPress={() => {
@@ -131,10 +132,29 @@ class RecordVideoScreen extends React.Component {
                   this.onCloseVideoRecorder(renderProps.videoInfo);
                 }}
                 block
-                info
+                disabled={renderProps.isRecording}
+                info={
+                  !renderProps.isRecording &&
+                  !renderProps.hasOwnProperty('videoInfo')
+                }
+                success={
+                  !renderProps.isRecording &&
+                  (renderProps.hasOwnProperty('videoInfo') /* &&
+                    renderProps.videoInfo.hasOwnProperty('uri') */)
+                }
                 style={{ margin: 5 }}
               >
-                <Text>Go Back</Text>
+                {renderProps.isRecording ? (
+                  <Text style={styles.buttonText}>Recording</Text>
+                ) : null}
+                {!renderProps.isRecording ? (
+                  <Text style={styles.buttonText}>
+                    {renderProps.hasOwnProperty('videoInfo')/*  &&
+                    renderProps.videoInfo.hasOwnProperty('uri') */
+                      ? 'Save Video'
+                      : 'Go Back'}
+                  </Text>
+                ) : null}
               </Button>
             );
           }}/*

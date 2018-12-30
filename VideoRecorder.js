@@ -465,7 +465,7 @@ VideoRecorder.defaultProps = {
   permissionsAlert: {
     display: true,
     title: 'Permissions Required',
-    message: 'Camera permissions are required to add images to location.',
+    message: 'Camera permissions are required for this app to run properly.',
     tryAgainText: 'Try Again',
     doNotTryAgainText: 'OK',
     doNotTryAgainCallback: () => {

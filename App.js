@@ -22,7 +22,7 @@ const RootStack = createStackNavigator(
   {
     initialRouteName: 'HomeScreen',
     navigationOptions: {
-      title: 'Video Recorder 4Expo Demo',
+      title: 'Video 4Expo Demo',
       headerStyle: {
         backgroundColor: '#2266cc',
 
